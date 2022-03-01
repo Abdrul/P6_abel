@@ -4,7 +4,7 @@ const fs = require('fs');
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
     console.log(sauceObject);
-    delete sauceObject; 
+    delete sauceObject._id; 
     const sauce = new Sauce({
         ...sauceObject, //operateur spread title: req.body.title
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
