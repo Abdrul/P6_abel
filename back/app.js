@@ -1,15 +1,14 @@
 const express = require('express');
 require('dotenv').config();
 const helmet = require('helmet');
-const Ddos = require('ddos');
+// const Ddos = require('ddos');
 const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
 
-app.use(helmet());
 
-const ddos = new Ddos({burst:10, limit:15});
-app.use(ddos.express);
+// const ddos = new Ddos({burst:10, limit:15});
+// app.use(ddos.express);
 
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce');
@@ -25,7 +24,6 @@ mongoose.connect(process.env.MONGO_URL,
     }
 )
 
-app.use(express.json());
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -33,8 +31,11 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
+app.use(express.json());
 
-app.use('/images', express.static(path.join(__dirname, 'images')))
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
+app.use(helmet());
 
 app.use('/api/auth', userRoutes);
 app.use('/api/sauces', sauceRoutes);

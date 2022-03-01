@@ -3,7 +3,6 @@ const fs = require('fs');
 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
-    console.log(sauceObject);
     delete sauceObject._id; 
     const sauce = new Sauce({
         ...sauceObject, //operateur spread title: req.body.title
@@ -11,11 +10,22 @@ exports.createSauce = (req, res, next) => {
     });
     sauce.save()
     .then(() => res.status(201).json({ message : "Objet enregistre" }))
-    .catch((error) => res.status(400).json({ error }));
+    .catch((error) => console.log(error));
 };
 
 
 exports.modifySauce = (req, res, next) => {
+
+    if(req.file) {
+        Sauce.findOne({ _id: req.params.id })
+        .then((sauce) => {
+            const filename = sauce.imageUrl.split("/images/")[1];
+            fs.unlink(`images/${filename}`, (error) => {
+                if(error) throw error;
+            })
+        })
+        .catch((error) => res.status(400).json({ error }));
+    } 
     const sauceObject = req.file ? 
     {
         ...JSON.parse(req.body.sauce),
@@ -52,7 +62,7 @@ exports.deleteSauce = (req, res, next) => {
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
     .then((sauce) => res.status(200).json(sauce))
-    .catch((error) => res.status(400).json({ error }));
+    .catch((error) => console.log(error));
 };
 
 exports.getAllSauces = (req, res, next) => {
