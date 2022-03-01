@@ -1,8 +1,7 @@
-// importation du models de mongodb
+const Sauce = require('../models/Sauce');
 
 
-exports.like = (req, res, next) => {
-    // model
+exports.likeSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id})
     .then((sauce) => {
         res.status(200).json(sauce)
