@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "ddos": "^0.2.1",
+    "dotenv": "^16.0.0",
+    "helmet": "^5.0.2"
+  }
+}
